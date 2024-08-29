@@ -197,6 +197,7 @@
     <Content Include="Resources\SP\EXP_GetKGTotal.sql" />
     <Content Include="Resources\SP\EXP_GetRutasKG.sql" />
     <Content Include="Resources\SP\EXP_GetRutasPRE.sql" />
+    <Content Include="Resources\SP\EXX_ImpresionProgramacion.sql" />
     <None Include="assets\modelForms\obs.srf" />
     <None Include="assets\modelForms\frmFormulacion.srf" />
     <None Include="assets\modelForms\frmLiqProIGV.srf" />

@@ -282,6 +282,22 @@ namespace AddonListaMaterialesYrutas.data_schema
                 tipo_campo = SAPbobsCOM.BoFieldTypes.db_Alpha,
                 tamano = 50
             });
+            myList.Add(new CampoBean()
+            {
+                nombre_tabla = TABLE_RUTA,
+                nombre_campo = "EXP_RUTA",
+                descrp_campo = "Ruta Reporte",
+                tipo_campo = SAPbobsCOM.BoFieldTypes.db_Memo,
+                tamano = 50
+            });
+            myList.Add(new CampoBean()
+            {
+                nombre_tabla = TABLE_RUTA,
+                nombre_campo = "EXP_REPORTE",
+                descrp_campo = "Nombre Reporte",
+                tipo_campo = SAPbobsCOM.BoFieldTypes.db_Alpha,
+                tamano = 50
+            });
             #endregion
             #region lote
             myList.Add(new CampoBean()
@@ -431,6 +447,17 @@ namespace AddonListaMaterialesYrutas.data_schema
                 nombre_tabla = TABLE_OT_DET,
                 nombre_campo = "EXX_DPARCIAL",
                 descrp_campo = "Parcial",
+                tipo_campo = SAPbobsCOM.BoFieldTypes.db_Alpha,
+                tamano = 1,
+                validValues = new string[] { "Y", "N" },
+                validDescription = new string[] { "Si", "No" },
+                valorPorDef = "N"
+            });
+            myList.Add(new CampoBean()
+            {
+                nombre_tabla = TABLE_OT_DET,
+                nombre_campo = "EXX_DANULA",
+                descrp_campo = "Anulado",
                 tipo_campo = SAPbobsCOM.BoFieldTypes.db_Alpha,
                 tamano = 1,
                 validValues = new string[] { "Y", "N" },
