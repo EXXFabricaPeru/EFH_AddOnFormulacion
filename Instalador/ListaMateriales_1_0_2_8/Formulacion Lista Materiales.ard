@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AddOnRegData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SlientInstallation="No" SlientUpgrade="No" Partnernmsp="EXXIS" SchemaVersion="3.0" Type="" MultipleVersion="false" OnDemand="" OnPremise="" ExtName="Formulacion Lista Materiales" ExtVersion="1.0.2.8" Contdata="https://www.exxis-group.com/" Partner="EXXIS Perú" DBType="HANA" ClientType="W">
+  <Validity>
+    <SBOCompatibility>
+      <Version From="" To="" />
+    </SBOCompatibility>
+  </Validity>
+  <Configuration>
+    <Repository>
+      <Properties />
+    </Repository>
+    <Deployment>
+      <Properties />
+    </Deployment>
+    <Assignment>
+      <Properties />
+    </Assignment>
+  </Configuration>
+  <Addons>
+    <Addon Name="Formulacion Lista Materiales" Group="" ForceFlag="" Visible="" AutoAssign="" SelfUpgrd="">
+      <x86 AddonExe="AddonListaMaterialesYrutas.exe" AddonSig="4671352D2A1C052D36C472FF26F3B5C4" ExeDir="X86Client">
+        <Installation>
+          <Files>
+            <File FileName="X86Client\AddonListaMaterialesYrutas.exe">
+              <Actions />
+            </File>
+            <File FileName="X86Client\AddonListaMaterialesYrutas.pdb">
+              <Actions />
+            </File>
+          </Files>
+        </Installation>
+        <Uninstallation>
+          <Files>
+            <File FileName="X86Client\AddonListaMaterialesYrutas.exe">
+              <Actions />
+            </File>
+            <File FileName="X86Client\AddonListaMaterialesYrutas.pdb">
+              <Actions />
+            </File>
+          </Files>
+        </Uninstallation>
+      </x86>
+      <x64 AddonExe="AddonListaMaterialesYrutas.exe" AddonSig="B1BE8758CAD6F1F7EB7B456AE128DBA8" ExeDir="X64Client">
+        <Installation>
+          <Files>
+            <File FileName="X64Client\AddonListaMaterialesYrutas.exe">
+              <Actions />
+            </File>
+            <File FileName="X64Client\AddonListaMaterialesYrutas.pdb">
+              <Actions />
+            </File>
+          </Files>
+        </Installation>
+        <Uninstallation>
+          <Files>
+            <File FileName="X64Client\AddonListaMaterialesYrutas.exe">
+              <Actions />
+            </File>
+            <File FileName="X64Client\AddonListaMaterialesYrutas.pdb">
+              <Actions />
+            </File>
+          </Files>
+        </Uninstallation>
+      </x64>
+    </Addon>
+  </Addons>
+  <XApps>
+    <XApp Name="" Path="" FileName="" />
+  </XApps>
+  <UDQs>
+    <UDQ udqname="">
+      <Hana FileName="" />
+    </UDQ>
+  </UDQs>
+</AddOnRegData>
