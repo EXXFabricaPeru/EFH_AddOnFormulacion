@@ -145,7 +145,7 @@ CREATE FUNCTION "EXP_FormLM_MAQUINA" ( in codformula nvarchar(50),
                          fo1."U_EXP_RECMAQ" "ITEMCODE" ,
                          res."ResName" "DESC" ,
                          ROUND(
-                         	((EXP_GETKG(:ItemCode, 1000, 1, FO1."U_EXP_CODRUT")/
+                         	((EXP_GETKG(:ItemCode, 1000, 0, FO1."U_EXP_CODRUT")/
                          		(:AnchoPT * 
                          		:LargoPT * 
                          		(IFNULL(NULLIF(FO1."U_EXP_ESPESOR",0),1)*"EXP_GetConversion"(FO1."U_EXP_UNESP"))* 

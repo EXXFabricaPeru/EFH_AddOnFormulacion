@@ -5,6 +5,7 @@ using SAPbouiCOM;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace AddonListaMaterialesYrutas.view
 {
@@ -36,7 +37,7 @@ namespace AddonListaMaterialesYrutas.view
         private const string C_FOR_KGA = "Col_3", C_FOR_KGB = "Col_4", C_FOR_KGC = "Col_5", C_FOR_KGD = "Col_6", C_FOR_KGE = "Col_7";//FORMULA
         private const string C_RUT_RUTAS = "Col_1";//RUTA
         private const string C_EXT_RDE = "Col_RDe", C_EXT_MAT = "Col_9", C_EXT_UMANC = "Col_23", C_EXT_MEANC = "Col_4", C_EXT_UMESP = "Col_16", C_EXT_MANGA = "Col_6", C_EXT_TRAT = "Col_8";//EXTRUSION
-        private const string C_IMP_MAT = "Col_14", C_IMP_UMESP = "Col_10", C_IMP_SENT = "Col_30", C_IMP_NOCIL = "Col_15", C_IMP_DESA = "Col_16", C_IMP_REPETI = "Col_13", C_IMP_NRBAND = "Col_12", C_IMP_MEBAND = "Col_41",
+        private const string C_IMP_MAT = "Col_14", C_IMP_UMESP = "Col_10", C_IMP_SENT = "Col_30", C_IMP_NOCIL = "Col_15", C_IMP_DESA = "Col_16", C_IMP_REPETI = "Col_13", C_IMP_NRBAND = "Col_12", C_IMP_MEBAND = "Col_41", C_IMP_MPRIMA= "Col_MP",
             C_IMP_T1 = "Col_28", C_IMP_T8 = "Col_29", C_IMP_T2 = "Col_4", C_IMP_T3 = "Col_6", C_IMP_T4 = "Col_31", C_IMP_T5 = "Col_32", C_IMP_T6 = "Col_33", C_IMP_T7 = "Col_34";//IMPRESION
         private const string C_LAM_MAT1 = "Col_8", C_LAM_UMANC = "Col_14", C_LAM_UMESP = "Col_6", C_LAM_MAT2 = "Col_15";//LAMINA
         private const string C_SEL_MAT = "Col_17", C_SEL_UMESP = "Col_14", C_SEL_UMFUE = "Col_6", C_SEL_TSEL1 = "Col_9", C_SEL_TSEL2 = "Col_19";//SELLADO
@@ -376,6 +377,10 @@ namespace AddonListaMaterialesYrutas.view
                         {
                             CalcularAnchoExtrusion(oEvent, true);
                         }
+                        if (oEvent.ColUID.Equals(C_IMP_MPRIMA))
+                        {
+                            
+                        }
                         break;
                     case MTX_LAMINA:
                         MatrixLostFocus(oEvent, dsLAMINA, Constantes.RT_LAMINA);
@@ -595,6 +600,8 @@ namespace AddonListaMaterialesYrutas.view
                             res = SetRuta(oEvent);
                             oMatrix.LoadFromDataSource();
                         }
+
+                        OrdenarInductores();
                         InstanciateComboRuta(cboCodRuta);
                         InstanciateComboRuta(cboCodRutaExt, true);
 
@@ -623,6 +630,44 @@ namespace AddonListaMaterialesYrutas.view
                 mForm.Freeze(false);
             }
             return res;
+        }
+
+        private void OrdenarInductores( )
+        {
+            SAPbouiCOM.Matrix matrixInductor = mForm.Items.Item(MTX_INDUCT).Specific;
+            List<Tuple<string, string, bool>> Listinduc = new List<Tuple<string, string, bool>>();
+            for (int i = 1; i <= matrixInductor.RowCount; i++)
+            {
+                var induc = Tuple.Create(
+                    matrixInductor.GetCellSpecific("Col_0", i).Value,
+                    matrixInductor.GetCellSpecific("Col_1", i).Value,
+                    ((CheckBox)(matrixInductor.Columns.Item("Col_2").Cells.Item(i).Specific)).Checked
+                    );
+                Listinduc.Add(induc);
+
+            }
+
+            matrixInductor.Clear();
+            int cont = 1;
+            foreach (var item in Listinduc.OrderBy(x => x.Item1).Distinct())
+            {
+                if (!string.IsNullOrEmpty(item.Item1))
+                {
+                    matrixInductor.AddRow();
+
+                    var codRut = (EditText)matrixInductor.Columns.Item("Col_0").Cells.Item(cont).Specific;
+                    codRut.Value = item.Item1;
+
+                    var ind = (EditText)matrixInductor.Columns.Item("Col_1").Cells.Item(cont).Specific;
+                    ind.Value = item.Item2;
+
+                    var act = (CheckBox)matrixInductor.Columns.Item("Col_2").Cells.Item(cont).Specific;
+                    act.Checked = item.Item3;
+
+                    cont++;
+                }
+
+            }
         }
 
         private void LimpiarInductoresAnteriores(ItemEvent oEvent)
@@ -676,6 +721,39 @@ namespace AddonListaMaterialesYrutas.view
                     }
                 }
 
+                List<Tuple<string, string, bool>> Listinduc = new List<Tuple<string, string, bool>>();
+                for (int i = 1; i <= matrixInductor.RowCount; i++)
+                {
+                    var induc = Tuple.Create(
+                        matrixInductor.GetCellSpecific("Col_0", i).Value,
+                        matrixInductor.GetCellSpecific("Col_1", i).Value,
+                        ((CheckBox)(matrixInductor.Columns.Item("Col_2").Cells.Item(i).Specific)).Checked
+                        );
+                    Listinduc.Add(induc);                
+                 
+                }
+
+                matrixInductor.Clear();
+                int cont = 1;
+                foreach (var item in Listinduc.OrderBy(x => x.Item1).Distinct())
+                {
+                    if (!string.IsNullOrEmpty(item.Item1))
+                    {
+                        matrixInductor.AddRow();
+
+                        var codRut = (EditText)matrixInductor.Columns.Item("Col_0").Cells.Item(cont).Specific;
+                        codRut.Value = item.Item1;
+
+                        var ind = (EditText)matrixInductor.Columns.Item("Col_1").Cells.Item(cont).Specific;
+                        ind.Value = item.Item2;
+
+                        var act = (CheckBox)matrixInductor.Columns.Item("Col_2").Cells.Item(cont).Specific;
+                        act.Checked = item.Item3;
+
+                        cont++;
+                    }
+                  
+                }
 
 
                 //int filasEliminadas = 0;
@@ -743,6 +821,7 @@ namespace AddonListaMaterialesYrutas.view
                     dsFRRUTA.SetValue("U_EXP_REFILE", oEvent.Row - 1, rutaRS.Fields.Item("REFILE").Value.ToString());
                     oMatrix.LoadFromDataSource();
 
+                    ValidateRutSpecificMatrix(dsFRRUTA.GetValue("U_EXP_CODRUT", oEvent.Row - 1), rutaRS.Fields.Item("Value").Value.ToString(), lineRut);
                     switch (dsFRRUTA.GetValue("U_EXP_CODRUT", oEvent.Row - 1))
                     {
                         case Constantes.RT_EXTRUS:
@@ -792,6 +871,166 @@ namespace AddonListaMaterialesYrutas.view
             return true;
         }
 
+        private bool ValidateRutSpecificMatrix(string Ruta, string aux = "", string codeRut = "")
+        {
+            mForm.Freeze(true);
+            var row = 0;
+            try
+            {
+                oMatrix = mForm.Items.Item(MTX_FREXTR).Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var codRut = (EditText)oMatrix.Columns.Item(C_CODRUT).Cells.Item(i).Specific;
+
+                    if (codRut.Value == codeRut)
+                    {
+                        row = i;
+                    }
+
+                }
+                if (row != 0)
+                {
+                    oMatrix.DeleteRow(row);
+                    return true;
+                }
+
+                oMatrix = mForm.Items.Item(MTX_FRIMPR).Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var codRut = (EditText)oMatrix.Columns.Item(C_CODRUT).Cells.Item(i).Specific;
+
+                    if (codRut.Value == codeRut)
+                    {
+                        row = i;
+                    }
+
+                }
+                if (row != 0)
+                {
+                    oMatrix.DeleteRow(row);
+                    return true;
+                }
+
+                oMatrix = mForm.Items.Item(MTX_LAMINA).Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var codRut = (EditText)oMatrix.Columns.Item(C_CODRUT).Cells.Item(i).Specific;
+
+                    if (codRut.Value == codeRut)
+                    {
+                        row = i;
+                    }
+
+                }
+                if (row != 0)
+                {
+                    oMatrix.DeleteRow(row);
+                    return true;
+                }
+
+                oMatrix = mForm.Items.Item(MTX_FRSELL).Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var codRut = (EditText)oMatrix.Columns.Item(C_CODRUT).Cells.Item(i).Specific;
+
+                    if (codRut.Value == codeRut)
+                    {
+                        row = i;
+                    }
+
+                }
+                if (row != 0)
+                {
+                    oMatrix.DeleteRow(row);
+                    return true;
+                }
+
+                oMatrix = mForm.Items.Item(MTX_FRCORT).Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var codRut = (EditText)oMatrix.Columns.Item(C_CODRUT).Cells.Item(i).Specific;
+
+                    if (codRut.Value == codeRut)
+                    {
+                        row = i;
+                    }
+
+                }
+                if (row != 0)
+                {
+                    oMatrix.DeleteRow(row);
+                    return true;
+                }
+
+                oMatrix = mForm.Items.Item(MTX_FRHABI).Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var codRut = (EditText)oMatrix.Columns.Item(C_CODRUT).Cells.Item(i).Specific;
+
+                    if (codRut.Value == codeRut)
+                    {
+                        row = i;
+                    }
+
+                }
+                if (row != 0)
+                {
+                    oMatrix.DeleteRow(row);
+                    return true;
+                }
+
+                oMatrix = mForm.Items.Item(MTX_FRREBO).Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var codRut = (EditText)oMatrix.Columns.Item(C_CODRUT).Cells.Item(i).Specific;
+
+                    if (codRut.Value == codeRut)
+                    {
+                        row = i;
+                    }
+
+                }
+                if (row != 0)
+                {
+                    oMatrix.DeleteRow(row);
+                    return true;
+                }
+
+                oMatrix = mForm.Items.Item(MTX_FRSERV).Specific;
+                for (int i = 1; i <= oMatrix.RowCount; i++)
+                {
+                    var codRut = (EditText)oMatrix.Columns.Item(C_CODRUT).Cells.Item(i).Specific;
+
+                    if (codRut.Value == codeRut)
+                    {
+                        row = i;
+                    }
+
+                }
+
+                if (row != 0)
+                {
+                    oMatrix.DeleteRow(row);
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            finally
+            {
+                mForm.Freeze(false);
+            }
+           
+         
+
+           
+            return true;
+        }
+
         private bool WhenDataAdd(SAPbouiCOM.ItemEvent oEvent)
         {
             bool res = true;
@@ -827,6 +1066,29 @@ namespace AddonListaMaterialesYrutas.view
                             break;
                         case MTX_FREXTR:
                         case MTX_FRIMPR:
+
+                            oMatrix = mForm.Items.Item(oEvent.ItemUID).Specific;
+                            switch (oEvent.ColUID)
+                            {
+                                case "Col_MP":
+                                    oMatrix.FlushToDataSource();
+                                    dsFRIMPR.SetValue("U_EXP_MPRIMA", oEvent.Row - 1, dtbl.GetValue("ItemCode", 0).Trim());
+                                    dsFRIMPR.SetValue("U_EXP_DESA", oEvent.Row - 1, (double.Parse(dsFRIMPR.GetValue("U_EXP_DESA", oEvent.Row - 1), CultureInfo.InvariantCulture)).ToString());
+                                    //oMatrix.FlushToDataSource();
+                                    oMatrix.LoadFromDataSource();
+                                    break;
+                                case "Col_Maq":
+                                    oMatrix.FlushToDataSource();
+                                    dsFRIMPR.SetValue("U_EXP_RECMAQ", oEvent.Row - 1, dtbl.GetValue("VisResCode", 0).Trim());
+  
+                                    oMatrix.LoadFromDataSource();
+                                    break;
+                            }
+                          
+                            //var x = (EditText)(oMatrix.Columns.Item(C_IMP_DESA).Cells.Item(oEvent.Row).Specific);
+                            //x.TabOrder = 150;
+                            //oMatrix.AutoResizeColumns();
+                            break;
                         case MTX_LAMINA:
                         case MTX_FRSELL:
                         case MTX_FRCORT:
