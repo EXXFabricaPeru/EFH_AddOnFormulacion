@@ -467,6 +467,8 @@ namespace AddonListaMaterialesYrutas.view
                     if (oEvent.ColUID.Equals(C_FOR_KGA))
                     {
                         CalcularPorcentajesFormula();
+                        mForm.Mode = BoFormMode.fm_UPDATE_MODE;
+                        
                     }
                     break;
                 case Constantes.RT_EXTRUS:
@@ -1063,8 +1065,22 @@ namespace AddonListaMaterialesYrutas.view
                             dsFORMUL.SetValue("U_EXP_DESCRP", oEvent.Row - 1, dtbl.GetValue("ItemName", 0).Trim());
                             //oMatrix.FlushToDataSource();
                             oMatrix.LoadFromDataSource();
+                            mForm.Mode = BoFormMode.fm_UPDATE_MODE;
                             break;
                         case MTX_FREXTR:
+                            oMatrix = mForm.Items.Item(oEvent.ItemUID).Specific;
+                            switch (oEvent.ColUID)
+                            {
+                                
+                                case "Col_Maq":
+                                    oMatrix.FlushToDataSource();
+                                    dsFREXTR.SetValue("U_EXP_RECMAQ", oEvent.Row - 1, dtbl.GetValue("VisResCode", 0).Trim());
+                                    oMatrix.LoadFromDataSource();
+                                    mForm.Mode = BoFormMode.fm_UPDATE_MODE;
+
+                                    break;
+                            }
+                            break;
                         case MTX_FRIMPR:
 
                             oMatrix = mForm.Items.Item(oEvent.ItemUID).Specific;
@@ -1076,15 +1092,16 @@ namespace AddonListaMaterialesYrutas.view
                                     dsFRIMPR.SetValue("U_EXP_DESA", oEvent.Row - 1, (double.Parse(dsFRIMPR.GetValue("U_EXP_DESA", oEvent.Row - 1), CultureInfo.InvariantCulture)).ToString());
                                     //oMatrix.FlushToDataSource();
                                     oMatrix.LoadFromDataSource();
+                                    mForm.Mode = BoFormMode.fm_UPDATE_MODE;
                                     break;
                                 case "Col_Maq":
                                     oMatrix.FlushToDataSource();
                                     dsFRIMPR.SetValue("U_EXP_RECMAQ", oEvent.Row - 1, dtbl.GetValue("VisResCode", 0).Trim());
-  
                                     oMatrix.LoadFromDataSource();
+                                    mForm.Mode = BoFormMode.fm_UPDATE_MODE;
                                     break;
                             }
-                          
+
                             //var x = (EditText)(oMatrix.Columns.Item(C_IMP_DESA).Cells.Item(oEvent.Row).Specific);
                             //x.TabOrder = 150;
                             //oMatrix.AutoResizeColumns();
